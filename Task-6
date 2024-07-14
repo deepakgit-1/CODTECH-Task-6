@@ -1,0 +1,33 @@
+# Install PyTorch with CUDA support
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+
+# Install diffusers
+pip install diffusers
+
+# Install additional libraries if needed
+pip install transformers
+pip install safetensors
+
+
+
+
+import torch
+from diffusers import DiffusionPipeline
+
+# Load the diffusion model pipeline
+pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16,  use_safetensors=True,  variant="fp16")
+
+# Check if CUDA is available and move the model to GPU
+if torch.cuda.is_available():
+    pipe.to("cuda")
+else:
+    print("CUDA is not available. Using CPU.")
+
+# Define your prompt
+prompt = "Harry Potter plays football"
+
+# Generate images based on the prompt
+generated_images = pipe(prompt=prompt).images
+
+# Display or process the generated images as needed
+print(generated_images[0])  # Assuming you want to see the first generated image
